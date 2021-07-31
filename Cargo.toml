@@ -1,5 +1,8 @@
 [package]
 name = "doldorajs"
+authors = ["etteryand0 <etteryand@gmail.com>"]
+readme = "./README.md"
+homepage = "https://github.com/etteryand0/doldorajs"
 version = "0.1.0"
 edition = "2018"
 
