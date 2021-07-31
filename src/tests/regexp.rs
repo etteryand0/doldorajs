@@ -1,7 +1,6 @@
-use regex::Regex;
-
 #[test]
 fn test_regex() {
+  use regex::Regex;
   let expression = r"^([^a-z])|[^a-z_0-9-]+?";
   let project_name_re = Regex::new(expression).unwrap();
   assert_eq!(project_name_re.is_match("1fail_fail"), true);
