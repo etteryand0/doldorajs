@@ -4,12 +4,13 @@ use std::fmt;
 #[derive(fmt::Debug)]
 pub enum ErrorCode {
     ERR_NOT_ENOUGH_ARGUMENTS,
+    ERR_INVALID_PROJECT_NAME,
 }
 
 #[derive(fmt::Debug)]
 pub struct DError {
     pub message: String,
-    pub status: ErrorCode,
+    pub code: ErrorCode,
 }
 
 // impl for DError to println! ErrorCode

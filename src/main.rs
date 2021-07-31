@@ -2,6 +2,7 @@ mod error;
 
 use error::{DError, ErrorCode};
 
+use regex::Regex;
 use std::env;
 
 // \x1b[33m - Yellow
@@ -25,10 +26,23 @@ fn check_arguments() -> Result<(), DError> {
             error = Some(DError {
                 message: String::from("You have to provide at least a project name \n")
                     + USAGE_TEXT,
-                status: ErrorCode::ERR_NOT_ENOUGH_ARGUMENTS,
+                code: ErrorCode::ERR_NOT_ENOUGH_ARGUMENTS,
             })
         }
-        _ => (),
+        _ => {
+            // first char can only be [a-z]
+            // other chars can only be [a-z], _, +, 0-9
+            let expression = r"^([^a-z])|[^a-z_0-9-]+?";
+            let project_name_re = Regex::new(expression).unwrap();
+            
+            if project_name_re.is_match(&argv[1]) {
+                error = Some(DError {
+                    message: String::from(expression) 
+                        + " Project name can only begin with [a-z] and can't contain [A-Z] or any special character except _-",
+                    code: ErrorCode::ERR_INVALID_PROJECT_NAME
+                })
+            }
+        }
     }
 
     // if error is initialized, then return Err()
@@ -60,7 +74,7 @@ fn main() {
     match status {
         Ok(_) => (),
         Err(e) => {
-            println!("\x1b[31m{:?}\x1b[0m: {}", e.status, e.message);
+            println!("\x1b[31m{:?}\x1b[0m: {}", e.code, e.message);
             std::process::exit(1);
         }
     }
