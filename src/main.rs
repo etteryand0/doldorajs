@@ -1,4 +1,8 @@
-use std::{env, fmt};
+mod error;
+
+use error::{DError, ErrorCode};
+
+use std::env;
 
 // \x1b[33m - Yellow
 // \x1b[32m - Green
@@ -6,25 +10,6 @@ use std::{env, fmt};
 // \x1b[0m - Reset
 const USAGE_TEXT: &str = "\x1b[33mUsage of Doldora\x1b[0m: doldora <project_name> \
                     \n    there is no optional flags for now\n";
-
-#[allow(non_camel_case_types)]
-#[derive(fmt::Debug)]
-enum ErrorCode {
-    ERR_NOT_ENOUGH_ARGUMENTS,
-}
-
-#[derive(fmt::Debug)]
-struct DError {
-    message: String,
-    status: ErrorCode,
-}
-
-// impl for DError to println! ErrorCode
-impl fmt::Display for DError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{:?}", self)
-    }
-}
 
 // TODO. fn to validate arguments and proccess/analyze them (in future)
 fn check_arguments() -> Result<(), DError> {
