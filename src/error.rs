@@ -19,3 +19,8 @@ impl fmt::Display for DError {
         write!(f, "{:?}", self)
     }
 }
+
+pub fn throw_error(e: DError) {
+    println!("\x1b[31m{:?}\x1b[0m: {}", e.code, e.message);
+    std::process::exit(1);
+}
