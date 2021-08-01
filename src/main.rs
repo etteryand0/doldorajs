@@ -86,9 +86,13 @@ fn main() {
             io::stdout().flush().unwrap();
             
             let mut confirmation = String::new();
-            io::stdin()
-                .read_line(&mut confirmation)
-                .expect("Error while reading input");
+            match io::stdin().read_line(&mut confirmation) {
+                Ok(_) => (),
+                Err(_) => throw_error(DError {
+                    message: String::from("Error while reading input"),
+                    code: ErrorCode::ERR_IO_STDIN_FAILURE,
+                })
+            }
 
             confirmation = String::from(confirmation.to_lowercase().trim());
             if confirmation == "n" 
