@@ -4,7 +4,10 @@ mod tests;
 use error::{DError, ErrorCode};
 
 use regex::Regex;
-use std::env;
+use std::{
+    env, 
+    io::{self, Write}
+};
 
 // \x1b[33m - Yellow
 // \x1b[32m - Green
@@ -73,7 +76,23 @@ fn main() {
     let status = check_arguments();
 
     match status {
-        Ok(_) => (),
+        Ok(_) => {
+            let argv: Vec<String> = env::args().collect();
+            print!("Creating project named \x1b[36m'{}'\x1b[0m, proceed? [Y,n]: ", argv[1]);
+            io::stdout().flush().unwrap();
+            
+            let mut confirmation = String::new();
+            io::stdin()
+                .read_line(&mut confirmation)
+                .expect("Error while reading input");
+
+            confirmation = String::from(confirmation.to_lowercase().trim());
+            if confirmation == "n" 
+            || confirmation != "y" {
+                println!("Aborting... ");
+                std::process::exit(0);
+            }
+        },
         Err(e) => {
             println!("\x1b[31m{:?}\x1b[0m: {}", e.code, e.message);
             std::process::exit(1);
