@@ -1,7 +1,11 @@
 mod error;
 mod tests;
+mod command_line;
 
-use error::{DError, ErrorCode};
+use error::{DError, ErrorCode, throw_error};
+use command_line::{
+    create_dir,
+};
 
 use regex::Regex;
 use std::{
@@ -74,11 +78,11 @@ fn attributition() {
 fn main() {
     attributition();
     let status = check_arguments();
+    let argv: Vec<String> = env::args().collect();
 
     match status {
         Ok(_) => {
-            let argv: Vec<String> = env::args().collect();
-            print!("Creating project named \x1b[36m'{}'\x1b[0m, proceed? [Y,n]: ", argv[1]);
+            print!("Creating project named \x1b[36m'{}'\x1b[0m, proceed? [Y,n]: ", &argv[1]);
             io::stdout().flush().unwrap();
             
             let mut confirmation = String::new();
@@ -93,11 +97,11 @@ fn main() {
                 std::process::exit(0);
             }
         },
-        Err(e) => {
-            println!("\x1b[31m{:?}\x1b[0m: {}", e.code, e.message);
-            std::process::exit(1);
-        }
+        Err(e) => throw_error(e),
     }
 
-    // actual doldora funcs ...
+    match create_dir(&argv[1]) {
+        Ok(_) => (),
+        Err(e) => throw_error(e),
+    }
 }

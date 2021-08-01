@@ -5,6 +5,7 @@ use std::fmt;
 pub enum ErrorCode {
     ERR_NOT_ENOUGH_ARGUMENTS,
     ERR_INVALID_PROJECT_NAME,
+    ERR_FS_FAILURE,
 }
 
 #[derive(fmt::Debug)]
